@@ -1,0 +1,105 @@
+/* CountdownOverlay.css */
+.countdown-overlay {
+  position: fixed;
+  inset: 0;
+  background: #ffffff; /* user requested white background */
+  overflow: hidden;
+  z-index: 9999;
+}
+
+/* each floating wrapper (will be absolutely positioned via transform) */
+.floating-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  pointer-events: auto; /* allow hover */
+  transition: transform 180ms ease, box-shadow 160ms ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+}
+
+/* video styling: fills wrapper */
+.floating-video__media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* hover: pause + scale up slightly */
+/* .floating-video:hover {
+  transform: scale(0.5) !important;
+  z-index: 10001;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+} */
+
+/* central countdown layout */
+.countdown-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none; /* clicks pass to underlying videos if needed */
+  user-select: none;
+  padding: 16px;
+}
+
+.countdown-center {
+  backdrop-filter: blur(10px);
+  padding: 15px 25px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.55);
+}
+
+
+.countdown-text .big {
+  font-size: 48px;
+  font-weight: 800;
+  color: #111;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.03);
+}
+
+.countdown-text .sep {
+  font-size: 14px;
+  color: #333;
+  margin-left: 4px;
+  margin-right: 8px;
+  align-self: center;
+}
+
+.subtext {
+  margin-top: 12px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* small screens scale down */
+@media (max-width: 480px) {
+  .countdown-text {
+    flex-wrap: nowrap;        /* 🚫 stop wrapping */
+    backdrop-filter: blur(4px) !important;
+    overflow-x: auto;         /* allow scrolling horizontally if needed */
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .countdown-center {
+    width: 90%;
+  }
+
+  .countdown-text .big {
+    font-size: 28px;
+    padding: 4px 6px;
+  }
+
+  .countdown-text .sep {
+    font-size: 12px;
+  }
+  .subtext { font-size: 13px; }
+}
