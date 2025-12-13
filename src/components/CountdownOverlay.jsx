@@ -93,7 +93,7 @@ function FloatingVideo({ src, index }) {
 
 export default function CountdownOverlay() {
   // IST target: 2025-12-14T00:00:00+05:30
-  const targetISO = "2025-12-13T18:30:00.000Z"; // equivalent UTC for 2025-12-14 00:00 IST
+  const targetISO = "2025-12-12T18:30:00.000Z"; // equivalent UTC for 2025-12-14 00:00 IST
   const { timeLeft, days, hours, minutes, seconds } = useCountdown(targetISO);
   const startGame = useGameStore((s) => s.startGame);
   const [visible, setVisible] = useState(true);
