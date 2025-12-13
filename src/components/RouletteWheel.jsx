@@ -42,7 +42,8 @@ export default function RouletteWheel() {
     <div className="roulette-container">
       <br />
       <h2>Enjoy the Floptropican Roulette</h2>
-      <p>Explicit Lyrics warning so lower your volumns</p>
+      <p>Explicit Lyrics warning so lower your volumns. Also, expect delay is audio sometimes</p>
+      <p></p>
       <img
         ref={wheelRef}
         onClick={spinWheel}

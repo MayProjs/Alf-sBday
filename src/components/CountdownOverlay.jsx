@@ -14,8 +14,6 @@ function useCountdown(targetDateISO) {
       const diff = new Date(targetDateISO) - new Date();
       setTimeLeft(Math.max(0, diff));
     };
-
-    // update 4x per second for smoothness
     const id = setInterval(tick, 250);
     tick();
     return () => clearInterval(id);
@@ -29,7 +27,7 @@ function useCountdown(targetDateISO) {
   return { timeLeft, days, hours, minutes, seconds };
 }
 
-/* FloatingVideo: single drifting video 'particle' */
+/* FloatingVideo unchanged */
 function FloatingVideo({ src, index }) {
   const ref = useRef();
   const pos = useRef({ x: 0, y: 0, vx: 0, vy: 0, w: 150, h: 150 });
@@ -37,32 +35,23 @@ function FloatingVideo({ src, index }) {
 
   useEffect(() => {
     const el = ref.current;
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
 
-    // seed random pos + velocity (slower speeds)
-    pos.current.x = Math.random() * (vw - pos.current.w);
-    pos.current.y = Math.random() * (vh - pos.current.h);
-    pos.current.vx = (Math.random() - 0.5) * (0.2 + Math.random() * 0.6); // px/frame
-    pos.current.vy = (Math.random() - 0.5) * (0.2 + Math.random() * 0.6);
+    pos.current.x = Math.random() * (window.innerWidth - pos.current.w);
+    pos.current.y = Math.random() * (window.innerHeight - pos.current.h);
+    pos.current.vx = (Math.random() - 0.5) * 0.6;
+    pos.current.vy = (Math.random() - 0.5) * 0.6;
 
     function step() {
       const p = pos.current;
       p.x += p.vx;
       p.y += p.vy;
 
-      // bounce off edges
-      if (p.x <= 0) { p.x = 0; p.vx *= -1; }
-      if (p.x + p.w >= window.innerWidth) { p.x = window.innerWidth - p.w; p.vx *= -1; }
-      if (p.y <= 0) { p.y = 0; p.vy *= -1; }
-      if (p.y + p.h >= window.innerHeight) { p.y = window.innerHeight - p.h; p.vy *= -1; }
+      if (p.x <= 0 || p.x + p.w >= window.innerWidth) p.vx *= -1;
+      if (p.y <= 0 || p.y + p.h >= window.innerHeight) p.vy *= -1;
 
-      // apply transform
       if (el) {
         el.style.transform = `translate3d(${p.x}px, ${p.y}px, 0)`;
-        // subtle rotation for vibe
-        const rot = Math.sin((p.x + p.y + index * 123) / 200) * 3;
-        el.style.rotate = `${rot}deg`;
+        el.style.rotate = `${Math.sin((p.x + p.y + index) / 200) * 3}deg`;
       }
 
       rafRef.current = requestAnimationFrame(step);
@@ -77,28 +66,20 @@ function FloatingVideo({ src, index }) {
       className="floating-video"
       ref={ref}
       style={{ width: pos.current.w, height: pos.current.h }}
-      title="hover to pause"
     >
-      <video
-        src={src}
-        loop
-        muted
-        playsInline
-        autoPlay
-        className="floating-video__media"
-      />
+      <video src={src} loop muted playsInline autoPlay />
     </div>
   );
 }
 
 export default function CountdownOverlay() {
-  // IST target: 2025-12-14T00:00:00+05:30
-  const targetISO = "2025-12-13T18:30:00.000Z"; // equivalent UTC for 2025-12-14 00:00 IST
+  const targetISO = "2025-12-13T18:30:00.000Z"; // IST midnight
   const { timeLeft, days, hours, minutes, seconds } = useCountdown(targetISO);
   const startGame = useGameStore((s) => s.startGame);
-  const [visible, setVisible] = useState(true);
 
-  // sources — edit filenames if you used other names
+  const [stage, setStage] = useState("countdown"); // ⭐ NEW
+  const videoRef = useRef(null);                   // ⭐ NEW
+
   const sources = [
     "/videos/gif1.mp4",
     "/videos/gif2.mp4",
@@ -106,39 +87,72 @@ export default function CountdownOverlay() {
     "/videos/gif4.mp4",
     "/videos/gif5.mp4",
     "/videos/gif6.mp4",
-    "/videos/gif7.mp4",
-    "/videos/gif8.mp4",
-    "/videos/gif9.mp4",
-    "/videos/gif10.mp4",
-    "/videos/gif11.mp4",
-    "/videos/gif12.mp4",
-    "/videos/gif13.mp4",
-    "/videos/gif14.mp4",
-    "/videos/gif15.mp4",
   ];
 
+  // ⭐ switch to video when countdown ends
   useEffect(() => {
-    if (timeLeft <= 0) {
-      // hide overlay, then start the game
-      setVisible(false);
-      // small delay to let overlay fade
-      setTimeout(() => {
-        startGame();
-      }, 600);
+    if (timeLeft <= 0 && stage === "countdown") {
+      setStage("video");
     }
-  }, [timeLeft, startGame]);
+  }, [timeLeft, stage]);
 
-  if (!visible) return null;
+  // ⭐ autoplay video when stage switches
+  useEffect(() => {
+    if (stage === "video" && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [stage]);
 
+  // 🎬 VIDEO STAGE
+  if (stage === "video") {
+    return (
+      <div className="teaser-overlay">
+        <video
+          ref={videoRef}
+          src="/teaser.mp4"
+          autoPlay
+          muted
+          playsInline
+          onClick={() => (videoRef.current.muted = false)}
+          onEnded={() => {
+            setStage("done");
+            startGame(); // ⭐ GAME STARTS ONLY AFTER VIDEO
+          }} style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+        }}
+      />
+       <div
+        style={{
+          position: "absolute",
+          bottom: "20px",
+          width: "100%",
+          textAlign: "center",
+          color: "white",
+          fontSize: "14px",
+          opacity: 0.7,
+        }}
+      >
+        Tap for here for sound 🔊
+      </div>
+      </div>
+    );
+  }
+
+  // 🧹 AFTER VIDEO — REMOVE OVERLAY
+  if (stage === "done") return null;
+
+  // ⏳ COUNTDOWN STAGE
   return (
     <div className="countdown-overlay">
-      {/* floating videos */}
       {sources.map((s, i) => (
         <FloatingVideo key={s} src={s} index={i} />
       ))}
 
-      {/* central countdown */}
-      <div className="countdown-center" aria-live="polite">
+      <div className="countdown-center">
         <div className="countdown-text">
           <span className="big">{String(days).padStart(2, "0")}</span>
           <span className="sep">days</span>
@@ -149,7 +163,10 @@ export default function CountdownOverlay() {
           <span className="big">{String(seconds).padStart(2, "0")}</span>
           <span className="sep">secs</span>
         </div>
-        <div className="subtext">left to skip this khia-est day of the year.</div>
+
+        <div className="subtext">
+          left to skip this khia-est day of the year.
+        </div>
       </div>
     </div>
   );

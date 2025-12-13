@@ -103,3 +103,10 @@
   }
   .subtext { font-size: 13px; }
 }
+
+.teaser-overlay {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 10000;
+}
