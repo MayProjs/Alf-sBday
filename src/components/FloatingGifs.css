@@ -1,0 +1,22 @@
+.floating-gifs-container {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 50 !important;
+  pointer-events: none;
+}
+
+.floating-gif {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  opacity: 0.9;
+  border-radius: 16px;
+  animation: floatUp 12s linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(120vh) rotate(0deg); }
+  to { transform: translateY(-20vh) rotate(20deg); }
+}

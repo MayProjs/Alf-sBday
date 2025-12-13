@@ -1,0 +1,78 @@
+/* Background dim + blur */
+.ios-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.28);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+/* Main popup card */
+.ios-modal-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  width: 85%;
+  max-width: 340px;
+
+  padding: 26px 28px;
+  border-radius: 22px;
+  text-align: center;
+
+  box-shadow: 0 8px 30px rgba(0,0,0,0.20);
+
+  animation: iosPopup 0.32s ease forwards;
+}
+
+/* Icon */
+.ios-modal-icon {
+  font-size: 44px;
+  margin-bottom: 6px;
+}
+
+/* Title */
+.ios-modal-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  margin-bottom: 4px;
+}
+
+/* Subtitle */
+.ios-modal-subtitle {
+  font-size: 16px;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+/* iOS blue button */
+.ios-btn {
+  background: #007aff;
+  color: white;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 12px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.2s ease;
+}
+
+.ios-btn:active {
+  background: #0066d6;
+  transform: scale(0.96);
+}
+
+/* Animation */
+@keyframes iosPopup {
+  0%   { transform: scale(0.65); opacity: 0; }
+  60%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); }
+}

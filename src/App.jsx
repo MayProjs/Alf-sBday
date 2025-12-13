@@ -1,7 +1,8 @@
 import StartScreen from "./components/StartScreen";
 import GameCanvas from "./components/GameCanvas";
 import GameOverScreen from "./components/GameOverScreen";
-import BirthdayScreen from "./components/BirthdayScreen";
+// import BirthdayScreen from "./components/BirthdayScreen";
+import BirthdayPage from "./components/BirthdayPage";
 import ScoreOverlay from "./components/ScoreOverlay";
 import BirthdayToast from "./components/BirthdayToast";
 import { useGameStore } from "./store/useGameStore";
@@ -17,8 +18,8 @@ export default function App() {
       <StartScreen />
       {/* <ScoreOverlay /> */}
       <GameCanvas />
-      {gameOver && <GameOverScreen />}
-      <BirthdayScreen />
+      {/* {gameOver && <GameOverScreen />} */}
+      {/* <BirthdayPage /> */}
       <BirthdayToast />
     </div>
   );

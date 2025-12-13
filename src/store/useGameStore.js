@@ -7,14 +7,19 @@ export const useGameStore = create((set) => ({
 
   isBirthdayUnlocked: false,   // for StartScreen
   showBirthdayPopup: false,    // for toast popup
+  birthdayShouldRedirect: false, // redirect only AFTER death
 
   startGame: () =>
-    set({
-      score: 0,
-      isPlaying: true,
-      gameOver: false,
-      showBirthdayPopup: false,
-    }),
+  set({
+    score: 0,
+    isPlaying: true,
+    gameOver: false,
+    showBirthdayPopup: false,
+    // ADD THESE
+    birthdayShouldRedirect: false,
+    isBirthdayUnlocked: false,
+  }),
+
 
   endGame: () =>
     set({
@@ -25,15 +30,19 @@ export const useGameStore = create((set) => ({
   addScore: () =>
     set((state) => {
       const newScore = state.score + 1;
+      const updates = { score: newScore };
 
       let changes = { score: newScore };
 
-      if (newScore === 3 && !state.isBirthdayUnlocked) {
-        changes.isBirthdayUnlocked = true;
-        changes.showBirthdayPopup = true;
-      }
+   // Unlock birthday zone at score 10
+     if (newScore === 3 && !state.isBirthdayUnlocked) {
+  updates.isBirthdayUnlocked = true;
+  updates.birthdayShouldRedirect = true;
+  updates.showBirthdayPopup = true;
+}
 
-      return changes;
+
+      return updates;
     }),
 
   closeBirthdayPopup: () => set({ showBirthdayPopup: false }),

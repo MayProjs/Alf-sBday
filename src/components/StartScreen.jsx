@@ -1,37 +1,33 @@
 import { useGameStore } from "../store/useGameStore";
+import GameOverScreen from "./GameOverScreen";
+import BirthdayPage from "./BirthdayPage";
 
 export default function StartScreen() {
   const isPlaying = useGameStore((s) => s.isPlaying);
   const score = useGameStore((s) => s.score);
+  const gameOver = useGameStore((s) => s.gameOver);
   const birthdayUnlocked = useGameStore((s) => s.isBirthdayUnlocked);
+  const shouldRedirect = useGameStore((s) => s.birthdayShouldRedirect);
   const startGame = useGameStore((s) => s.startGame);
 
-  // 👉 DO NOT SHOW anything during gameplay
+  // 🎮 Never show UI while playing
   if (isPlaying) return null;
 
-  // 👉 Game over + birthday unlocked
-  if (score >= 10 && birthdayUnlocked) {
+  // 🎉 Game over AND birthday unlocked → redirect to birthday page
+  if (gameOver && shouldRedirect) {
     return (
-      <div className="birthday-wrapper">
-        <h1>🎉 Happy Birthday Alf! 🎉</h1>
-        <p>You reached the party! 🎂</p>
-        <button onClick={startGame}>Play Again</button>
-      </div>
+      <BirthdayPage/>
     );
   }
 
-  // 👉 Normal game over
-  if (score > 0) {
+  // 💀 Normal Game Over
+  if (gameOver) {
     return (
-      <div className="game-over">
-        <h1>Game Over 💀</h1>
-        <p>Score: {score}</p>
-        <button onClick={startGame}>Play Again</button>
-      </div>
+      <GameOverScreen/>
     );
   }
 
-  // 👉 Start screen (before playing)
+  // 🟡 Start screen before gameplay
   return (
     <div className="start-screen">
       <h1>Tap to Start</h1>

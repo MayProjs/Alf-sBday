@@ -1,0 +1,54 @@
+.ios-toast {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50px);
+  background: #ffffffa9;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 18px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.253);
+  opacity: 0;
+  animation: slideDown 0.45s ease forwards, fadeOut 0.5s ease 2.5s forwards;
+  z-index: 99999;
+  pointer-events: none;   /* NOT interactive */
+}
+
+.ios-toast-icon {
+  font-size: 24px;
+}
+
+.ios-toast-text .title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000;
+  margin-bottom: 2px;
+}
+
+.ios-toast-text .subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+}
+
+/* Slide-down animation */
+@keyframes slideDown {
+  0% {
+    transform: translateX(-50%) translateY(-50px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(-50%) translateY(0px);
+    opacity: 1;
+  }
+}
+
+/* Auto fade-out animation */
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
