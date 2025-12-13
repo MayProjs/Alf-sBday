@@ -87,6 +87,15 @@ export default function CountdownOverlay() {
     "/videos/gif4.mp4",
     "/videos/gif5.mp4",
     "/videos/gif6.mp4",
+    "/videos/gif7.mp4",
+    "/videos/gif8.mp4",
+    "/videos/gif9.mp4",
+    "/videos/gif10.mp4",
+    "/videos/gif11.mp4",
+    "/videos/gif12.mp4",
+    "/videos/gif13.mp4",
+    "/videos/gif14.mp4",
+    "/videos/gif15.mp4",
   ];
 
   // ⭐ switch to video when countdown ends
